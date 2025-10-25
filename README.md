@@ -1,2 +1,2 @@
 # ComplexKt
-Complex number class for Kotlin
+cafetite.numerics.Complex number class for Kotlin
