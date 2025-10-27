@@ -602,15 +602,6 @@ import java.math.BigInteger
             Assertions.assertEquals(Complex.ONE, Complex.ONE)
             Assertions.assertEquals(Complex.I, Complex.I)
             Assertions.assertEquals(Complex.ONE, Complex.valueOf(1, 0))
-
-            Assertions.assertTrue(Complex.ONE.equals(1.toByte()))
-            Assertions.assertTrue(Complex.ONE.equals(1.toShort()))
-            Assertions.assertTrue(Complex.ONE.equals(1))
-            Assertions.assertTrue(Complex.ONE.equals(1L))
-            Assertions.assertTrue(Complex.ONE.equals(1.0.toFloat()))
-            Assertions.assertTrue(Complex.ONE.equals(1.0))
-            Assertions.assertTrue(Complex.ONE.equals(BigInteger.ONE))
-            Assertions.assertTrue(Complex.ONE.equals(BigDecimal.ONE))
         }
 
         @Test

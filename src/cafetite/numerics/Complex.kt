@@ -5,7 +5,7 @@ import java.math.BigInteger
 import kotlin.math.*
 
 /**
- * A unicode char using a 32 bit code. This class is a value class, so it takes up no extra space on the stack or heap.
+ * A class representing complex numbers. Each number consists of a real part and an imaginary part.
  *
  * @property real The real part.
  * @property imag The imaginary part.
@@ -31,6 +31,10 @@ class Complex private constructor(val real: Double, val imag: Double = 0.0) :
          * Constant 0+0i.
          */
         val ZERO: Complex = Complex(0.0, 0.0)
+
+        // "([+\\-]?\\d+(.\\d)?+i)", // imaginary only
+        // "([+\\-]?\\d+(.\\d+)?[+\\-](\\d+(.\\d+)?)?i)" // real only or real +/- imaginary
+        val regex = Regex("([+\\-]?\\d+(.\\d)?+i)|([+\\-]?\\d+(.\\d+)?[+\\-](\\d+(.\\d+)?)?i)")
 
         fun valueOf(real: Double, imag: Double = 0.0): Complex = Complex(real, imag)
         fun valueOf(real: Long, imag: Long = 0): Complex = Complex(real.toDouble(), imag.toDouble())
@@ -108,8 +112,8 @@ class Complex private constructor(val real: Double, val imag: Double = 0.0) :
 
         private fun nearlyEqual(a: Double, b: Double): Boolean {
             if (a == b) return true // handles infinities and exact equality
-            val diff = kotlin.math.abs(a - b)
-            val norm = kotlin.math.min((kotlin.math.abs(a) + kotlin.math.abs(b)), Double.MAX_VALUE)
+            val diff = abs(a - b)
+            val norm = min((abs(a) + abs(b)), Double.MAX_VALUE)
             return diff < EPS * norm
         }
     }
@@ -286,12 +290,9 @@ class Complex private constructor(val real: Double, val imag: Double = 0.0) :
 
     override fun toString(): String {
         val sb = StringBuilder()
-
         sb.append("%f".format(real).trimEnd('0').removeSuffix("."))
-
         sb.append("%+f".format(imag).trimEnd('0').removeSuffix("."))
         sb.append('i')
-
         return sb.toString()
     }
 
@@ -309,24 +310,15 @@ class Complex private constructor(val real: Double, val imag: Double = 0.0) :
 
     override infix fun equals(other: Any?): Boolean {
         if (this === other) return true
-        if (other !is Number) return false
-
-        if (other is Complex) return nearlyEqual(real, other.real) && nearlyEqual(imag, other.imag)
-
-        if (!isReal) return false
-        return nearlyEqual(real, other.toDouble())
+        if (other !is Complex) return false
+        return nearlyEqual(real, other.real) && nearlyEqual(imag, other.imag)
     }
 
     fun equalsExact(other: Any?): Boolean {
         if (this === other) return true
-        if (other !is Number) return false
-
-        if (other is Complex) return real == other.real && imag == other.imag
-
-        if (!isReal) return false
-        return real == other.toDouble()
+        if (other !is Complex) return false
+        return real == other.real && imag == other.imag
     }
-
 
     override fun hashCode(): Int {
         // Important: make hashCode consistent with equals
